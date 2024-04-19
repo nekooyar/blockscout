@@ -37,7 +37,21 @@ defmodule BlockScoutWeb.API.V2.SearchView do
       "circulating_market_cap" =>
         search_result.circulating_market_cap && to_string(search_result.circulating_market_cap),
       "is_verified_via_admin_panel" => search_result.is_verified_via_admin_panel,
-      "priority" => search_result.priority
+      "priority" => search_result.priority,
+      "certified" => if(search_result.certified, do: search_result.certified, else: false)
+    }
+  end
+
+  def prepare_search_result(%{type: "contract"} = search_result) do
+    %{
+      "type" => search_result.type,
+      "name" => search_result.name,
+      "address" => search_result.address_hash,
+      "url" => address_path(Endpoint, :show, search_result.address_hash),
+      "is_smart_contract_verified" => search_result.verified,
+      "ens_info" => search_result[:ens_info],
+      "priority" => search_result.priority,
+      "certified" => if(search_result.certified, do: search_result.certified, else: false)
     }
   end
 
