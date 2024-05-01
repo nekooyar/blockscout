@@ -3583,7 +3583,11 @@ defmodule Explorer.Chain do
       token_id: instance.token_id,
       updated_at: instance.updated_at
     })
-    |> order_by([instance], desc: instance.error in ^high_priority, asc: instance.error in ^negative_priority)
+    |> order_by([instance],
+      desc: instance.error in ^high_priority,
+      asc: instance.error in ^negative_priority,
+      asc: instance.updated_at
+    )
     |> add_fetcher_limit(limited?)
     |> Repo.stream_reduce(initial, reducer)
   end
