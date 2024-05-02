@@ -3576,8 +3576,14 @@ defmodule Explorer.Chain do
     # almost impossible to get valid metadata
     negative_priority = ["VM execution error", "no uri", "invalid json"]
 
+    refetch_interval = Application.get_env(:indexer, Indexer.Fetcher.TokenInstance.Retry)[:refetch_interval]
+
+    date_now = DateTime.utc_now()
+    some_time_ago_date = DateTime.add(date_now, -refetch_interval, :millisecond)
+
     Instance
     |> where([instance], not is_nil(instance.error))
+    |> where([instance], instance.updated_at <= ^some_time_ago_date)
     |> select([instance], %{
       contract_address_hash: instance.token_contract_address_hash,
       token_id: instance.token_id,
