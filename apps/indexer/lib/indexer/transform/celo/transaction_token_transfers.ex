@@ -30,7 +30,7 @@ defmodule Indexer.Transform.Celo.TransactionTokenTransfers do
   internal transactions.
   """
   def parse_transactions(transactions) do
-    celo_token_address = CeloCoreContracts.get_celo_token_address()
+    celo_token_address = CeloCoreContracts.get_address(:celo_token)
 
     token_transfers =
       transactions
@@ -62,7 +62,7 @@ defmodule Indexer.Transform.Celo.TransactionTokenTransfers do
   end
 
   def parse_internal_transactions(transactions, block_number_to_block_hash) do
-    celo_token_address = CeloCoreContracts.get_celo_token_address()
+    celo_token_address = CeloCoreContracts.get_address(:celo_token)
 
     token_transfers =
       transactions
@@ -103,7 +103,7 @@ defmodule Indexer.Transform.Celo.TransactionTokenTransfers do
   defp to_tokens(_token_transfers) do
     [
       %{
-        contract_address_hash: CeloCoreContracts.get_celo_token_address(),
+        contract_address_hash: CeloCoreContracts.get_address(:celo_token),
         type: @token_type
       }
     ]
